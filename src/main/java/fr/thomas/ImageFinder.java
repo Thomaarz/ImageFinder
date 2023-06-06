@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ImageFinder {
 
@@ -24,15 +25,20 @@ public class ImageFinder {
         imagesName = ImageUtil.loadDatabaseImagesName();
         images = ImageUtil.loadDatabaseImages(imagesName);
 
-        Image image = ImageUtil.loadImage("database/196.jpg");
+        Scanner scanner = new Scanner(System.in);
 
-        ByteImage byteImage = new ByteImage(image);
-        ImageUtil.displayImage(byteImage);
+        while (true) {
+            String input = scanner.nextLine();
+            try {
+                Image image = ImageUtil.loadImage("database/" + input);
+                ByteImage byteImage = new ByteImage(image);
+                ImageUtil.displayImage(byteImage);
 
-        double[] histogram = HistogramUtil.getHistogram(byteImage);
-        HistogramUtil.displayHistogram(histogram, "Histogram");
-
-        List<Image> similarities = SimilarityUtil.searchSimilarities(byteImage, 10);
-        similarities.forEach(ImageUtil::displayImage);
+                List<Image> similarities = SimilarityUtil.searchSimilarities(byteImage, 5);
+                similarities.forEach(ImageUtil::displayImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -20,7 +20,7 @@ public class SimilarityUtil {
         for (Map.Entry<Image, String> image : databaseImages.entrySet()) {
             ByteImage byteImage = new ByteImage(image.getKey());
             double[][] toHistogram = HistogramUtil.getHistogramRGB(byteImage);
-            double distance = calculateManhattanDistance(fromHistogram, toHistogram);
+            double distance = calculateEuclideanDistance(fromHistogram, toHistogram);
             similarities.put(image.getKey(), distance);
         }
 
@@ -53,20 +53,20 @@ public class SimilarityUtil {
         return result;
     }
 
-    public static double calculateManhattanDistance(double[] histogram1, double[] histogram2) {
+    public static double calculateEuclideanDistance(double[] histogram1, double[] histogram2) {
         double distance = 0.0;
 
-        if (histogram1.length > 20) histogram1 = HistogramUtil.reduceHistogram(histogram1, 20);
-        if (histogram2.length > 20) histogram2 = HistogramUtil.reduceHistogram(histogram2, 20);
-
         for (int i = 0; i < histogram1.length; i++) {
-            distance += Math.abs(histogram1[i] - histogram2[i]);
+            distance += Math.pow(histogram1[i] - histogram2[i], 2);
         }
+
+        distance = Math.sqrt(distance);
 
         return distance;
     }
 
-    public static double calculateManhattanDistance(double[][] histogram1, double[][] histogram2) {
+
+    public static double calculateEuclideanDistance(double[][] histogram1, double[][] histogram2) {
         double distance = 0.0;
 
         if (histogram1.length != histogram2.length) {
@@ -74,7 +74,7 @@ public class SimilarityUtil {
         }
 
         for (int i = 0; i < histogram1.length; i++) {
-            distance += calculateManhattanDistance(histogram1[i], histogram2[i]);
+            distance += calculateEuclideanDistance(histogram1[i], histogram2[i]);
         }
 
         return distance;
