@@ -56,6 +56,13 @@ public class SimilarityUtil {
     public static double calculateEuclideanDistance(double[] histogram1, double[] histogram2) {
         double distance = 0.0;
 
+        if (histogram1.length > 50) {
+            histogram1 = HistogramUtil.standardizeHistogram(histogram1);
+            histogram1 = HistogramUtil.standardizeHistogram(histogram1);
+            histogram1 = HistogramUtil.reduceHistogram(histogram1, 50);
+            histogram2 = HistogramUtil.reduceHistogram(histogram2, 50);
+        }
+
         for (int i = 0; i < histogram1.length; i++) {
             distance += Math.pow(histogram1[i] - histogram2[i], 2);
         }

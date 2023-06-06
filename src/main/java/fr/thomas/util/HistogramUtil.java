@@ -2,13 +2,13 @@ package fr.thomas.util;
 
 import fr.thomas.exceptions.HistogramException;
 import fr.unistra.pelican.ByteImage;
+import fr.unistra.pelican.Image;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.PlotUtilities;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -16,6 +16,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HistogramUtil {
 
@@ -157,6 +159,17 @@ public class HistogramUtil {
         return reduceHistogram;
     }
 
+
+    public static double[][] reduceHistogram(double[][] histogram, int partitions) {
+        double[][] histo = new double[histogram.length][histogram[0].length];
+
+        for (int i = 0; i < histogram.length; i++) {
+            histo[i] = reduceHistogram(histogram[i], partitions);
+        }
+
+        return histo;
+    }
+
     /**
      * Standardize a histogram with the frequency of each pixel
      * @param histogram: the histogram
@@ -168,10 +181,17 @@ public class HistogramUtil {
 
         for (int i = 0; i < histogram.length; i++) {
             standardizedHistogram[i] = histogram[i] / pixelsAmount;
-
-            System.out.println(histogram[i] / pixelsAmount);
         }
         return standardizedHistogram;
+    }
+
+    public static double[][] standardizeHistogram(double[][] histogram) {
+        double[][] histo = new double[histogram.length][histogram[0].length];
+
+        for (int i = 0; i < histogram.length; i++) {
+            histo[i] = standardizeHistogram(histogram[i]);
+        }
+        return histo;
     }
 
     /**

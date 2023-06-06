@@ -28,13 +28,13 @@ public class ImageFinder {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            System.out.println("Entrez le nom de l'image: ");
             String input = scanner.nextLine();
             try {
                 Image image = ImageUtil.loadImage("database/" + input);
                 ByteImage byteImage = new ByteImage(image);
-                ImageUtil.displayImage(byteImage);
 
-                List<Image> similarities = SimilarityUtil.searchSimilarities(byteImage, 5);
+                List<Image> similarities = SimilarityUtil.searchSimilarities(byteImage, 2);
                 similarities.forEach(ImageUtil::displayImage);
             } catch (Exception e) {
                 e.printStackTrace();
